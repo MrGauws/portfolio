@@ -6,6 +6,10 @@ import bcrypt from "bcrypt";
 import { connectDB } from "./database";
 import { User } from "./models/User";
 import { Types } from "mongoose";
+import { Project } from "./models/Project";
+import Message from "./models/Message";
+
+
 
 dotenv.config();
 connectDB();
@@ -33,6 +37,118 @@ app.get("/users", async (req: Request, res: Response): Promise<void> => {
     } catch (error) {
         res.status(500).json({ message: "Error fetching users" });
     }
+});
+
+app.post("/messages", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { senderName, senderEmail, message } = req.body;
+
+    // Kontrollera att alla nödvändiga fält finns
+    if (!senderName || !senderEmail || !message) {
+      res.status(400).json({ message: "Alla fält är obligatoriska." });
+      return;
+    }
+
+    // Skapa ett nytt meddelande i databasen
+    const newMessage = new Message({
+      senderName,
+      senderEmail,
+      message
+    });
+
+    await newMessage.save();
+
+    res.status(201).json({ message: "Meddelande sparat." });
+  } catch (error) {
+    console.error("Fel vid sparande av meddelande:", error);
+    res.status(500).json({ message: "Ett fel inträffade vid sparande." });
+  }
+});
+
+app.get("/messages", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const messages = await Message.find().sort({ createdAt: -1 });
+    res.status(200).json(messages);
+  } catch (error) {
+    console.error("Fel vid hämtning av meddelanden:", error);
+    res.status(500).json({ message: "Ett fel inträffade vid hämtning." });
+  }
+});
+
+app.delete("/projects/:id", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      res.status(401).json({ message: "Ingen token." });
+      return;
+    }
+
+    // Optionally verify token or user permissions here
+
+    const { id } = req.params;
+
+    if (!Types.ObjectId.isValid(id)) {
+      res.status(400).json({ message: "Ogiltigt projekt-ID." });
+      return;
+    }
+
+    const deletedProject = await Project.findByIdAndDelete(id);
+
+    if (!deletedProject) {
+      res.status(404).json({ message: "Projektet hittades inte." });
+      return;
+    }
+
+    res.status(200).json({ message: "Projektet har raderats." });
+  } catch (error) {
+    console.error("Fel vid borttagning av projekt:", error);
+    res.status(500).json({ message: "Serverfel vid borttagning av projekt." });
+  }
+});
+
+app.get("/projects", async (req: Request, res: Response) => {
+  try {
+    const projects = await Project.find();
+    res.json(projects);
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    res.status(500).json({ message: "Server error fetching projects" });
+  }
+});
+
+app.post("/projects", async (req: Request, res: Response): Promise<void> => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    res.status(401).json({ message: "Ingen token." });
+    return;
+  }
+
+  try {
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
+    const adminUser = await User.findById(decoded.id);
+
+    if (!adminUser?.isAdmin) {
+      res.status(403).json({ message: "Endast admins kan lägga till projekt." });
+      return;
+    }
+
+    const { title, description, demoLink, githubLink } = req.body;
+
+    if (!title || !description || !demoLink || !githubLink) {
+      res.status(400).json({ message: "Alla fält krävs." });
+      return;
+    }
+
+    const newProject = new Project({ title, description, demoLink, githubLink });
+    await newProject.save();
+
+    res.status(201).json({ message: "Projekt tillagt.", project: newProject });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Serverfel vid tillägg av projekt." });
+  }
 });
 
 app.post("/register", async (req: Request, res: Response): Promise<void> => {
