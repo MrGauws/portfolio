@@ -6,6 +6,9 @@ import { CreateProjectForm } from "./admin/CreateProjectForm";
 import { useEffect, useState } from "react";
 import { User } from "@/components/UserList";
 import { ContactForm } from "@/components/ContactForm";
+import { AboutSection } from "@/components/AboutSection";
+import Hero from "@/components/Hero";
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -109,75 +112,102 @@ export default function Home() {
         initial="hidden"
         animate="visible"
       >
-        {/* Header */}
-        <AnimatedSection>
-          <header className="text-center mb-12">
-            <h1 className="text-4xl font-extrabold hover:text-blue-500 transition duration-300 ease-in-out">
-              Herman Engström
-            </h1>
-            <p className="text-lg text-gray-500 mt-2 tracking-wide">
-              Fullstack Developer
-            </p>
-          </header>
-        </AnimatedSection>
+        {/* Hero Section */}
+        <Hero />
+      {/*<AnimatedSection>
+        <section className="flex flex-col items-center justify-center text-center py-20 px-4">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-5xl md:text-7xl font-bold text-accent"
+          >
+            Herman Engström
+          </motion.h1>
 
-        {/* Introduction Section */}
-        <AnimatedSection>
-          <p className="text-lg leading-relaxed">
+          <motion.h2
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="mt-4 text-xl md:text-3xl"
+          >
+            Fullstack Developer
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
+            className="mt-6 text-lg text-gray-300 max-w-2xl"
+          >
             Hej! Jag är en passionerad utvecklare som älskar att bygga moderna
-            webbapplikationer med React, Next.js, och Node.js.
-          </p>
+            webbapplikationer med React, Next.js och Node.js. 🚀
+          </motion.p>
+        </section>
+      </AnimatedSection>
+      */}
+
+        {/* About Section */}
+        <AnimatedSection>
+          <AboutSection />
         </AnimatedSection>
 
         {/* Projects Section */}
         <AnimatedSection>
-          <h2 className="text-2xl font-semibold mb-6">Projekt</h2>
-          <motion.ul className="grid grid-cols-1 md:grid-cols-2 gap-6" variants={containerVariants}>
-            {projects.map((project) => (
-              <motion.li
-                key={project.id}
-                className="border p-4 rounded shadow-md hover:shadow-lg hover:-translate-y-1 transition-transform"
-                variants={itemVariants}
-              >
-                <h3 className="text-lg font-bold hover:text-blue-500 transition duration-300 ease-in-out">
-                  {project.title}
-                </h3>
-                <p className="text-gray-600 mt-2">{project.description}</p>
-                <div className="mt-4 space-x-4">
-                  <a
-                    href={project.demoLink}
-                    className="text-blue-500 hover:underline hover:text-blue-600"
-                  >
-                    Demo
-                  </a>
-                  <a
-                    href={project.githubLink}
-                    className="text-blue-500 hover:underline hover:text-blue-600"
-                  >
-                    GitHub
-                  </a>
-                  {user?.isAdmin && (
-                    <button
-                      className="text-red-600 hover:underline"
-                      onClick={() => handleDelete(project.id)}
+          <section id="projects">
+            <h2 className="text-3xl font-semibold mb-8 text-white text-center">🚀 Projekt</h2>
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+              variants={containerVariants}
+            >
+              {projects.map((project) => (
+                <motion.div
+                  key={project.id}
+                  className="bg-zinc-800/30 backdrop-blur-md border border-zinc-700 rounded-2xl p-6 shadow-lg hover:shadow-accent hover:scale-[1.02] transition duration-300"
+                  variants={itemVariants}
+                >
+                  <h3 className="text-xl font-semibold text-accent mb-2">{project.title}</h3>
+                  <p className="text-gray-300 text-sm mb-4">{project.description}</p>
+                  <div className="flex flex-wrap justify-between gap-2 text-sm">
+                    <a
+                      href={project.demoLink}
+                      target="_blank"
+                      className="text-accent hover:underline"
                     >
-                      🗑️ Ta bort
-                    </button>
-                  )}
-                </div>
-              </motion.li>
-            ))}
-          </motion.ul>
+                      🌐 Demo
+                    </a>
+                    <a
+                      href={project.githubLink}
+                      target="_blank"
+                      className="text-gray-400 hover:underline"
+                    >
+                      🖥️ GitHub
+                    </a>
+                    {user?.isAdmin && (
+                      <button
+                        className="ml-auto text-red-500 hover:text-red-600 transition"
+                        onClick={() => handleDelete(project.id)}
+                      >
+                        🗑️ Ta bort
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </section>
 
-
-          {/* Lägg till nytt projekt, endast för admins */}
+          {/* Adminformulär */}
           {user?.isAdmin && (
-            <section className="mt-6">
-              <h3 className="text-xl font-semibold mb-4">Lägg till nytt projekt</h3>
+            <section className="mt-10">
+              <h3 className="text-2xl font-semibold mb-4 text-accent">
+                ✨ Lägg till nytt projekt
+              </h3>
               <CreateProjectForm onAdd={handleAddProject} />
             </section>
           )}
         </AnimatedSection>
+
 
         {/* Skills Section */}
         <AnimatedSection>
@@ -199,8 +229,10 @@ export default function Home() {
 
         {/* Contact Section */}
         <AnimatedSection>
+        <section id="contact">
           <h2 className="text-2xl font-semibold mb-4">Kontakt</h2>
             <ContactForm />
+            </section>
         </AnimatedSection>
 
         {/* UserList Section */}

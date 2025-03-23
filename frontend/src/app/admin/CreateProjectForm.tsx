@@ -10,32 +10,44 @@ export const CreateProjectForm = ({ onAdd }: { onAdd: (project: any) => void }) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!title || !description || !demoLink || !githubLink) {
       alert("Alla fält är obligatoriska");
       return;
     }
-  
-    // Skapa projektobjektet som ska skickas
+
     const newProject = { title, description, demoLink, githubLink };
-  
+
     try {
-      // Skicka projektet till backend
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Du måste vara inloggad för att skapa projekt.");
+        return;
+      }
+
       const res = await fetch("http://localhost:5000/projects", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newProject),
       });
-  
-      // Kontrollera om svaret var framgångsrikt
+
       if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Fel från server:", errorText);
         throw new Error("Kunde inte spara projektet");
       }
-  
-      // Lägg till projektet i frontendlistan
+
       const savedProject = await res.json();
+
+      if (!savedProject || !savedProject.title) {
+        console.warn("Svar från server saknar giltig data:", savedProject);
+        return;
+      }
+
       onAdd(savedProject);
       setTitle("");
       setDescription("");

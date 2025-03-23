@@ -19,8 +19,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="sv">
-      <body className={`${inter.variable} antialiased`}>
+    <html lang="sv" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.getItem("theme") === "dark") {
+                  document.documentElement.classList.add("dark");
+                }
+              } catch(e) {}
+            `,
+          }}
+        />
+      </head>
+      <body className={`${inter.variable} antialiased bg-white text-black dark:bg-zinc-900 dark:text-white transition-colors duration-300`}>
+
         <Navbar />
         <main>{children}</main>
       </body>

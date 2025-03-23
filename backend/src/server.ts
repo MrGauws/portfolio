@@ -58,10 +58,30 @@ app.post("/messages", async (req: Request, res: Response): Promise<void> => {
 
     await newMessage.save();
 
-    res.status(201).json({ message: "Meddelande sparat." });
+    res.status(201).json(newMessage);
   } catch (error) {
     console.error("Fel vid sparande av meddelande:", error);
     res.status(500).json({ message: "Ett fel inträffade vid sparande." });
+  }
+});
+
+app.patch("/messages/:id/read", async (req: Request, res: Response) => {
+  try {
+    const message = await Message.findByIdAndUpdate(
+      req.params.id,
+      { isRead: true },
+      { new: true }
+    );
+
+    if (!message) {
+      res.status(404).json({ message: "Meddelandet hittades inte." });
+      return;
+    }
+
+    res.status(200).json(message);
+  } catch (err) {
+    console.error("Fel vid uppdatering av lässtatus:", err);
+    res.status(500).json({ message: "Serverfel vid uppdatering." });
   }
 });
 
@@ -144,7 +164,7 @@ app.post("/projects", async (req: Request, res: Response): Promise<void> => {
     const newProject = new Project({ title, description, demoLink, githubLink });
     await newProject.save();
 
-    res.status(201).json({ message: "Projekt tillagt.", project: newProject });
+    res.status(201).json(newProject); // 🔥 Returnerar direkt projektet
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Serverfel vid tillägg av projekt." });

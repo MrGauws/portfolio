@@ -8,6 +8,7 @@ interface Message {
   senderEmail: string;
   message: string;
   createdAt: string;
+  isRead?: boolean; 
 }
 
 export const MessagesList = () => {
@@ -22,12 +23,11 @@ export const MessagesList = () => {
         const res = await fetch("http://localhost:5000/messages");
         if (!res.ok) throw new Error("Kunde inte hämta meddelanden.");
         const data: Message[] = await res.json();
-  
-        // Sortera meddelandena så att nyaste ligger först
+
         const sortedMessages = data.sort((a, b) => {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
-  
+
         setMessages(sortedMessages);
       } catch (err: any) {
         setError(err.message);
@@ -35,9 +35,26 @@ export const MessagesList = () => {
         setLoading(false);
       }
     };
-  
+
     fetchMessages();
   }, []);
+
+  const markAsRead = async (id: string) => {
+    try {
+      const res = await fetch(`http://localhost:5000/messages/${id}/read`, {
+        method: "PATCH",
+      });
+
+      if (!res.ok) throw new Error("Kunde inte uppdatera meddelande");
+
+      const updated = await res.json();
+      setMessages((prev) =>
+        prev.map((msg) => (msg._id === updated._id ? updated : msg))
+      );
+    } catch (err) {
+      console.error("Fel vid uppdatering:", err);
+    }
+  };
 
   if (loading) return <p>⏳ Laddar meddelanden...</p>;
   if (error) return <p className="text-red-600">{error}</p>;
@@ -82,6 +99,24 @@ export const MessagesList = () => {
             <p className="text-sm text-gray-500">
               {new Date(message.createdAt).toLocaleString()}
             </p>
+            <div className="mt-2 flex items-center gap-4">
+              {!message.isRead ? (
+                <span className="text-blue-400 text-sm">🔵 Oläst</span>
+              ) : (
+                <span className="text-green-400 text-sm">✅ Läst</span>
+              )}
+              {!message.isRead && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation(); // hindra klick på meddelandet
+                    markAsRead(message._id);
+                  }}
+                  className="text-sm text-blue-400 underline hover:text-blue-300"
+                >
+                  Markera som läst
+                </button>
+              )}
+            </div>
           </div>
         ))
       )}

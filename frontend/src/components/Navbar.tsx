@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "@/hooks/useTheme";
 
 export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const checkToken = () => {
@@ -32,7 +34,7 @@ export const Navbar = () => {
       <h1 className="text-lg font-bold">
         <Link href="/">🌐 Portfolio</Link>
       </h1>
-      <nav className="flex gap-4">
+      <nav className="flex gap-4 items-center">
         <Link href="/">Hem</Link>
         {!isLoggedIn ? (
           <Link href="/login">Logga in</Link>
@@ -45,6 +47,14 @@ export const Navbar = () => {
             </button>
           </>
         )}
+
+        {/* 🌗 Light/Dark Toggle-knapp */}
+        <button
+          onClick={toggleTheme}
+          className="text-sm bg-gray-200 dark:bg-gray-800 text-black dark:text-white px-3 py-1 rounded shadow hover:scale-105 transition"
+        >
+          {theme === "light" ? "🌙 Mörkt läge" : "☀️ Ljust läge"}
+        </button>
       </nav>
     </header>
   );

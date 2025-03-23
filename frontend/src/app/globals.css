@@ -1,17 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono&family=Inter:wght@400;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Anpassad global stil */
 body {
-  @apply bg-white text-gray-900;
+  @apply bg-background text-text;
+  font-family: 'Fira Mono', monospace; /* Terminal-feel 💚 */
 }
-
-a {
-  @apply text-blue-600 hover:underline;
-}
-
-input, button {
-  @apply focus:outline-none;
+html {
+  scroll-behavior: smooth;
 }
