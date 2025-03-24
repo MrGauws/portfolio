@@ -7,11 +7,13 @@ import { useTheme } from "@/hooks/useTheme";
 
 export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for dropdown menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home"); // State för aktiv sektion
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
-  const menuRef = useRef<HTMLDivElement>(null); // Explicitly type the ref as HTMLDivElement
+  const menuRef = useRef<HTMLDivElement>(null);
 
+  // Kontrollera inloggning
   useEffect(() => {
     const checkToken = () => {
       const token = localStorage.getItem("token");
@@ -25,7 +27,7 @@ export const Navbar = () => {
     };
   }, []);
 
-  // Handle clicks outside the dropdown to close it
+  // Hantera klick utanför dropdown för att stänga den
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -42,39 +44,94 @@ export const Navbar = () => {
     };
   }, [isMenuOpen]);
 
+  // Hantera scroll för att markera aktiv sektion
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["home", "about", "projects", "experience", "contact"];
+      const scrollPosition = window.scrollY + 100; // Justera för navbar-höjd
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (
+            scrollPosition >= offsetTop &&
+            scrollPosition < offsetTop + offsetHeight
+          ) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     router.push("/login");
-    setIsMenuOpen(false); // Close the menu on logout
+    setIsMenuOpen(false);
   };
 
   const toggleMenu = () => {
-    setIsMenuOpen((prev) => !prev); // Toggle the menu on click
+    setIsMenuOpen((prev) => !prev);
   };
 
   return (
-    <header className="bg-black text-white p-4 flex justify-center items-center gap-8">
+    <header className="bg-black text-white p-4 flex justify-center items-center gap-8 sticky top-0 z-50">
       {/* Main navigation links */}
       <nav className="flex gap-6 items-center">
         <span className="text-gray-400"> // </span>
-        <Link href="/" className="hover:underline">
+        <Link
+          href="#home"
+          className={`hover:underline ${
+            activeSection === "home" ? "underline text-teal-500" : ""
+          }`}
+          scroll={true}
+        >
           home
         </Link>
         <span className="text-gray-400"> // </span>
-        <Link href="/#about" className="hover:underline">
+        <Link
+          href="#about"
+          className={`hover:underline ${
+            activeSection === "about" ? "underline text-teal-500" : ""
+          }`}
+          scroll={true}
+        >
           about
         </Link>
         <span className="text-gray-400"> // </span>
-        <Link href="/#projects" className="hover:underline">
+        <Link
+          href="#projects"
+          className={`hover:underline ${
+            activeSection === "projects" ? "underline text-teal-500" : ""
+          }`}
+          scroll={true}
+        >
           projects
         </Link>
         <span className="text-gray-400"> // </span>
-        <Link href="/experience" className="hover:underline">
+        <Link
+          href="#experience"
+          className={`hover:underline ${
+            activeSection === "experience" ? "underline text-teal-500" : ""
+          }`}
+          scroll={true}
+        >
           experience
         </Link>
         <span className="text-gray-400"> // </span>
-        <Link href="/contact" className="hover:underline">
+        <Link
+          href="#contact"
+          className={`hover:underline ${
+            activeSection === "contact" ? "underline text-teal-500" : ""
+          }`}
+          scroll={true}
+        >
           contact
         </Link>
       </nav>
@@ -83,7 +140,7 @@ export const Navbar = () => {
       <div className="flex gap-4 items-center">
         {!isLoggedIn ? (
           <Link href="/login" className="hover:underline">
-            Logga in
+            Login
           </Link>
         ) : (
           <div className="relative" ref={menuRef}>
@@ -103,14 +160,14 @@ export const Navbar = () => {
                 <Link
                   href="/dashboard"
                   className="block px-4 py-2 hover:bg-gray-700"
-                  onClick={() => setIsMenuOpen(false)} // Close menu on click
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/admin"
                   className="block px-4 py-2 hover:bg-gray-700"
-                  onClick={() => setIsMenuOpen(false)} // Close menu on click
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   Admin
                 </Link>
@@ -118,7 +175,7 @@ export const Navbar = () => {
                   onClick={handleLogout}
                   className="block w-full text-left px-4 py-2 hover:bg-gray-700"
                 >
-                  Logga ut
+                  Logout
                 </button>
               </div>
             )}

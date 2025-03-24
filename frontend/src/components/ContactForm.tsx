@@ -10,7 +10,7 @@ export const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !subject || !message) {
-      alert("Fyll i alla fält.");
+      alert("Please fill in all fields.");
       return;
     }
 
@@ -21,14 +21,14 @@ export const ContactForm = () => {
         body: JSON.stringify({ senderEmail: email, senderName: subject, message }),
       });
 
-      if (!res.ok) throw new Error("Misslyckades att skicka");
+      if (!res.ok) throw new Error("Failed to send");
 
-      alert("✅ Meddelandet skickat!");
+      alert("✅ Message sent!");
       setEmail("");
       setSubject("");
       setMessage("");
     } catch (err) {
-      alert("❌ Något gick fel.");
+      alert("❌ Something went wrong.");
     }
   };
 
@@ -39,11 +39,11 @@ export const ContactForm = () => {
         className="bg-black text-green-400 font-mono p-6 rounded-lg border border-green-700 shadow-lg max-w-xl w-full space-y-4"
       >
         <h2 className="text-2xl text-green-400 text-center mb-4">
-          {"echo 'Kontakta mig' ▍"}
+          {"echo 'Contact Me' ▍"}
         </h2>
 
         <div>
-          <label className="block mb-1">> Din e-post:</label>
+          <label className="block mb-1">> Your email:</label>
           <input
             type="email"
             value={email}
@@ -53,7 +53,7 @@ export const ContactForm = () => {
         </div>
 
         <div>
-          <label className="block mb-1">> Ämne:</label>
+          <label className="block mb-1">> Subject:</label>
           <input
             type="text"
             value={subject}
@@ -63,7 +63,7 @@ export const ContactForm = () => {
         </div>
 
         <div>
-          <label className="block mb-1">> Meddelande:</label>
+          <label className="block mb-1">> Message:</label>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -77,7 +77,7 @@ export const ContactForm = () => {
             type="submit"
             className="bg-green-500 hover:bg-green-600 text-black px-4 py-2 rounded font-bold transition-all"
           >
-            ▍Skicka
+            ▍Send
           </button>
         </div>
       </form>

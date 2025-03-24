@@ -2,6 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
+import ScrollIndicator from "@/components/ScrollIndicator";
+import Footer from "@/components/Footer";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -35,10 +37,12 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${montserrat.variable} antialiased bg-black text-white transition-colors duration-300`}
+        className={`${montserrat.variable} antialiased bg-black dark:bg-gray-900 text-white dark:text-gray-200 transition-colors duration-300`}
       >
+        <ScrollIndicator />
         <Navbar />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
