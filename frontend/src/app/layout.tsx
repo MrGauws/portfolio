@@ -1,11 +1,12 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 
-const inter = Inter({
+const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "700"],
+  variable: "--font-montserrat",
 });
 
 export const metadata: Metadata = {
@@ -33,8 +34,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} antialiased bg-white text-black dark:bg-zinc-900 dark:text-white transition-colors duration-300`}>
-
+      <body
+        className={`${montserrat.variable} antialiased bg-black text-white transition-colors duration-300`}
+      >
         <Navbar />
         <main>{children}</main>
       </body>

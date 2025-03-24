@@ -5,6 +5,9 @@ const config: Config = {
   darkMode: "class", 
   theme: {
     extend: {
+      fontFamily: {
+        montserrat: ["Montserrat", "sans-serif"],
+      },
       colors: {
         background: '#0a0a0a',  // Huvudbakgrund
         primary: '#1f2937',     // Elementbakgrund

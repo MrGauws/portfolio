@@ -200,9 +200,6 @@ export default function Home() {
           {/* Adminformulär */}
           {user?.isAdmin && (
             <section className="mt-10">
-              <h3 className="text-2xl font-semibold mb-4 text-accent">
-                ✨ Lägg till nytt projekt
-              </h3>
               <CreateProjectForm onAdd={handleAddProject} />
             </section>
           )}
@@ -233,12 +230,6 @@ export default function Home() {
           <h2 className="text-2xl font-semibold mb-4">Kontakt</h2>
             <ContactForm />
             </section>
-        </AnimatedSection>
-
-        {/* UserList Section */}
-        <AnimatedSection>
-          <h2 className="text-2xl font-semibold mb-4">Användare</h2>
-          <UserList />
         </AnimatedSection>
       </motion.div>
     </main>
