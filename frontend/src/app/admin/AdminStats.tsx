@@ -1,5 +1,3 @@
-// frontend/src/app/admin/AdminStats.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";

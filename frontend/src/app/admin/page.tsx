@@ -71,7 +71,7 @@ export default function AdminPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Fel vid adminuppgradering");
 
-      // Uppdatera användaren i listan
+      // Uppdatera user in the list
       setUsers((prev) =>
         prev.map((u) => (u._id === id ? { ...u, isAdmin: true } : u))
       );

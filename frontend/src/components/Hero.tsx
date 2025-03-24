@@ -1,4 +1,3 @@
-// frontend/src/components/Hero.tsx
 "use client";
 
 import { useEffect, useRef } from "react";

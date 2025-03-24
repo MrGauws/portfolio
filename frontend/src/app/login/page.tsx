@@ -43,13 +43,13 @@ export default function LoginPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6">
-      <h1 className="text-2xl font-bold mb-4">Logga in</h1>
+      <h1 className="text-2xl font-bold mb-4">Login</h1>
       <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-sm">
         <input type="email" placeholder="E-post" value={email} onChange={(e) => setEmail(e.target.value)} className="p-2 border rounded" required />
         <input type="password" placeholder="Lösenord" value={password} onChange={(e) => setPassword(e.target.value)} className="p-2 border rounded" required />
-        <button type="submit" className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800">Logga in</button>
+        <button type="submit" className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800">Login</button>
         {error && <p className="text-red-500">{error}</p>}
-        {token && <p className="text-green-600 break-all">Inloggning lyckades! Token: <br /> {token}</p>}
+        {token && <p className="text-green-600 break-all">Login succeeded! Token: <br /> {token}</p>}
       </form>
     </main>
   );

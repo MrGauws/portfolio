@@ -3,13 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 
 export const CreateProjectForm = ({ onAdd }: { onAdd: (project: any) => void }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [demoLink, setDemoLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false); // Prevent duplicate submissions
-  const modalRef = useRef<HTMLDivElement>(null); // Ref to track the modal for outside clicks
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+  const modalRef = useRef<HTMLDivElement>(null); 
 
   // Handle clicks outside the modal to close it
   useEffect(() => {
@@ -45,7 +45,7 @@ export const CreateProjectForm = ({ onAdd }: { onAdd: (project: any) => void }) 
     const newProject = { title, description, demoLink, githubLink };
 
     try {
-      setIsSubmitting(true); // Disable further submissions
+      setIsSubmitting(true); 
       console.log("Submitting project:", newProject);
 
       const token = localStorage.getItem("token");
@@ -80,17 +80,17 @@ export const CreateProjectForm = ({ onAdd }: { onAdd: (project: any) => void }) 
       }
 
       console.log("Project saved successfully:", savedProject);
-      onAdd(savedProject); // Call onAdd only once
+      onAdd(savedProject); 
       setTitle("");
       setDescription("");
       setDemoLink("");
       setGithubLink("");
-      setIsModalOpen(false); // Close the modal on successful submission
+      setIsModalOpen(false); 
     } catch (error) {
       console.error("Error submitting project:", error);
       alert("Ett fel inträffade vid skapande av projekt");
     } finally {
-      setIsSubmitting(false); // Re-enable submissions
+      setIsSubmitting(false); 
     }
   };
 
@@ -100,7 +100,7 @@ export const CreateProjectForm = ({ onAdd }: { onAdd: (project: any) => void }) 
       <button
         onClick={() => setIsModalOpen(true)}
         className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-        disabled={isSubmitting} // Disable button while submitting
+        disabled={isSubmitting} 
       >
         Lägg till projekt...
       </button>

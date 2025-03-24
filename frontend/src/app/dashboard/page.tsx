@@ -31,12 +31,12 @@ export default function Dashboard() {
       });
   }, [router]);
 
-  if (!user) return <p>Laddar...</p>;
+  if (!user) return <p>Loading...</p>;
 
   return (
     <main className="p-8">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <p>Du är inloggad! 🎉</p>
+      <p>You're logged in! 🎉</p>
     </main>
   );
 }

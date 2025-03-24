@@ -18,7 +18,7 @@
 
 body {
   @apply bg-background text-text;
-  font-family: 'Fira Mono', monospace; /* Terminal-feel 💚 */
+  font-family: 'Fira Mono', monospace; 
 }
 html {
   scroll-behavior: smooth;

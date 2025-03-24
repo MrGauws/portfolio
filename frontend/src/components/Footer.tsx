@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-black dark:bg-gray-900 text-gray-400 py-6 border-t border-gray-800 relative">
       <div className="max-w-5xl mx-auto px-4 flex flex-col items-center space-y-4">
-        {/* Social Media Links (Centered) */}
+        {/* Social Media Links */}
         <div className="flex space-x-4">
           <a
             href="https://github.com/MrGauws"
@@ -51,7 +51,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright in bottom-right corner */}
+      {/* Copyright */}
       <div className="absolute bottom-2 right-4 text-gray-500 text-xs">
         <p>© 2025 Herman Engström</p>
       </div>

@@ -1,4 +1,3 @@
-// frontend/src/components/BackToTopButton.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,7 +7,7 @@ import { FaArrowUp } from "react-icons/fa";
 const BackToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Visa knappen när användaren har scrollat ner 300 pixlar
+  // Shows the button when the user scrolls down 300 pixels
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.scrollY > 300) {
@@ -22,7 +21,7 @@ const BackToTopButton = () => {
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
-  // Scrolla till toppen när knappen klickas
+  // Scrolls to the top when clicked
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,

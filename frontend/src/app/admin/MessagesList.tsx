@@ -108,7 +108,7 @@ export const MessagesList = () => {
               {!message.isRead && (
                 <button
                   onClick={(e) => {
-                    e.stopPropagation(); // hindra klick på meddelandet
+                    e.stopPropagation(); 
                     markAsRead(message._id);
                   }}
                   className="text-sm text-blue-400 underline hover:text-blue-300"

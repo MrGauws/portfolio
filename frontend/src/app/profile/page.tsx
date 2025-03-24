@@ -35,11 +35,11 @@ export default function ProfilePage() {
 
   return (
     <main className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Min Profil</h1>
-      <p><strong>Namn:</strong> {user.name}</p>
-      <p><strong>E-post:</strong> {user.email}</p>
+      <h1 className="text-2xl font-bold mb-4">My Profile</h1>
+      <p><strong>Name:</strong> {user.name}</p>
+      <p><strong>Email:</strong> {user.email}</p>
       {user.isAdmin && (
-        <p className="mt-4 text-blue-600 font-semibold">👑 Du är admin</p>
+        <p className="mt-4 text-blue-600 font-semibold">👑 You are admin!</p>
       )}
     </main>
   );
