@@ -20,9 +20,10 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    console.log("NEXT_PUBLIC_API_URL:", process.env.NEXT_PUBLIC_API_URL); 
 
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

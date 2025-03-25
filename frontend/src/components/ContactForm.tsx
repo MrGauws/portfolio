@@ -15,7 +15,7 @@ export const ContactForm = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/messages", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ senderEmail: email, senderName: subject, message }),
@@ -43,7 +43,7 @@ export const ContactForm = () => {
         </h2>
 
         <div>
-          <label className="block mb-1">> Your email:</label>
+          <label className="block mb-1">&gt; Your email:</label>
           <input
             type="email"
             value={email}
@@ -53,7 +53,7 @@ export const ContactForm = () => {
         </div>
 
         <div>
-          <label className="block mb-1">> Subject:</label>
+          <label className="block mb-1">&gt; Subject:</label>
           <input
             type="text"
             value={subject}
@@ -63,7 +63,7 @@ export const ContactForm = () => {
         </div>
 
         <div>
-          <label className="block mb-1">> Message:</label>
+          <label className="block mb-1">&gt; Message:</label>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}

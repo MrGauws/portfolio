@@ -1,3 +1,4 @@
+// frontend/src/components/SkillsSection.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -38,63 +39,63 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-// Categorized skills with icons and descriptions
+// Categorized skills with icons, descriptions, and proficiency levels
 const categorizedSkills = [
   {
     category: "🔧 Programming",
     skills: [
-      { name: "JavaScript", icon: <SiJavascript className="text-yellow-400" />, description: "Built dynamic and interactive web applications." },
-      { name: "TypeScript", icon: <SiTypescript className="text-blue-600" />, description: "Developed typed and secure JavaScript applications." },
-      { name: "PHP", icon: <FaPhp className="text-purple-600" />, description: "Worked on server-side logic in web projects." },
-      { name: "C#", icon: <SiMysql className="text-purple-800" />, description: "Built applications using object-oriented programming." },
-      { name: "Python", icon: <FaPython className="text-blue-500" />, description: "Used for scripting and data processing." },
+      { name: "JavaScript", icon: <SiJavascript className="text-yellow-400" />, description: "Built dynamic and interactive web applications.", proficiency: 90 },
+      { name: "TypeScript", icon: <SiTypescript className="text-blue-600" />, description: "Developed typed and secure JavaScript applications.", proficiency: 85 },
+      { name: "PHP", icon: <FaPhp className="text-purple-600" />, description: "Worked on server-side logic in web projects.", proficiency: 70 },
+      { name: "C#", icon: <SiMysql className="text-purple-800" />, description: "Built applications using object-oriented programming.", proficiency: 40 },
+      { name: "Python", icon: <FaPython className="text-blue-500" />, description: "Used for scripting and data processing.", proficiency: 55 },
     ],
   },
   {
     category: "🔧 Frameworks and Libraries",
     skills: [
-      { name: "React", icon: <FaReact className="text-cyan-400" />, description: "Built interactive interfaces for web applications." },
-      { name: "Next.js", icon: <SiNextdotjs className="text-white" />, description: "Created performance-optimized websites with SSR." },
-      { name: "Express.js", icon: <SiExpress className="text-white" />, description: "Built RESTful APIs for backend." },
-      { name: "Node.js", icon: <FaNodeJs className="text-green-500" />, description: "Ran JavaScript on the server-side for scalable applications." },
-      { name: "Tailwind CSS", icon: <SiTailwindcss className="text-teal-500" />, description: "Created responsive designs with utility-first CSS." },
-      { name: "Framer Motion", icon: <FaReact className="text-pink-500" />, description: "Created smooth animations for user interfaces." },
-      { name: "React Type Animation", icon: <FaReact className="text-blue-400" />, description: "Used for typewriter effects in portfolio." },
-      { name: "GSAP", icon: <FaReact className="text-green-400" />, description: "Created advanced parallax and timeline animations." },
-      { name: "Three.js", icon: <FaReact className="text-purple-400" />, description: "Experimented with 3D graphics in web projects." },
+      { name: "React", icon: <FaReact className="text-cyan-400" />, description: "Built interactive interfaces for web applications.", proficiency: 90 },
+      { name: "Next.js", icon: <SiNextdotjs className="text-white" />, description: "Created performance-optimized websites with SSR.", proficiency: 85 },
+      { name: "Express.js", icon: <SiExpress className="text-white" />, description: "Built RESTful APIs for backend.", proficiency: 80 },
+      { name: "Node.js", icon: <FaNodeJs className="text-green-500" />, description: "Ran JavaScript on the server-side for scalable applications.", proficiency: 80 },
+      { name: "Tailwind CSS", icon: <SiTailwindcss className="text-teal-500" />, description: "Created responsive designs with utility-first CSS.", proficiency: 85 },
+      { name: "Framer Motion", icon: <FaReact className="text-pink-500" />, description: "Created smooth animations for user interfaces.", proficiency: 75 },
+      { name: "React Type Animation", icon: <FaReact className="text-blue-400" />, description: "Used for typewriter effects in portfolio.", proficiency: 70 },
+      { name: "GSAP", icon: <FaReact className="text-green-400" />, description: "Created advanced parallax and timeline animations.", proficiency: 70 },
+      { name: "Three.js", icon: <FaReact className="text-purple-400" />, description: "Experimented with 3D graphics in web projects.", proficiency: 50 },
     ],
   },
   {
     category: "🛠️ DevOps & Tools",
     skills: [
-      { name: "Git", icon: <FaGitAlt className="text-orange-500" />, description: "Managed version control for projects." },
-      { name: "GitHub Pages", icon: <FaGitAlt className="text-gray-400" />, description: "Hosted static websites." },
-      { name: "Docker", icon: <FaDocker className="text-blue-500" />, description: "Containerized applications for deployment." },
-      { name: "Linux", icon: <SiLinux className="text-white" />, description: "Worked in Linux environments for development." },
-      { name: "AWS", icon: <FaAws className="text-orange-400" />, description: "Deployed applications to the cloud." },
-      { name: "PowerShell", icon: null, description: "Automated tasks in Windows environments." },
+      { name: "Git", icon: <FaGitAlt className="text-orange-500" />, description: "Managed version control for projects.", proficiency: 90 },
+      { name: "GitHub Pages", icon: <FaGitAlt className="text-gray-400" />, description: "Hosted static websites.", proficiency: 80 },
+      { name: "Docker", icon: <FaDocker className="text-blue-500" />, description: "Containerized applications for deployment.", proficiency: 60 },
+      { name: "Linux", icon: <SiLinux className="text-white" />, description: "Worked in Linux environments for development.", proficiency: 75 },
+      { name: "AWS", icon: <FaAws className="text-orange-400" />, description: "Deployed applications to the cloud.", proficiency: 40 },
+      { name: "PowerShell", icon: null, description: "Automated tasks in Windows environments.", proficiency: 60 },
     ],
   },
   {
     category: "🗃️ Databases",
     skills: [
-      { name: "MongoDB", icon: <SiMongodb className="text-green-500" />, description: "Managed NoSQL databases in MERN projects." },
-      { name: "SQL", icon: <SiMysql className="text-blue-600" />, description: "Worked with relational databases." },
+      { name: "MongoDB", icon: <SiMongodb className="text-green-500" />, description: "Managed NoSQL databases in MERN projects.", proficiency: 80 },
+      { name: "SQL", icon: <SiMysql className="text-blue-600" />, description: "Worked with relational databases.", proficiency: 70 },
     ],
   },
   {
     category: "🧩 CMS & E-commerce",
     skills: [
-      { name: "WordPress", icon: <FaWordpress className="text-blue-700" />, description: "Built and maintained websites." },
-      { name: "Shopify", icon: <FaShopify className="text-green-600" />, description: "Created e-commerce solutions." },
+      { name: "WordPress", icon: <FaWordpress className="text-blue-700" />, description: "Built and maintained websites.", proficiency: 95 },
+      { name: "Shopify", icon: <FaShopify className="text-green-600" />, description: "Created e-commerce solutions.", proficiency: 95 },
     ],
   },
   {
     category: "🌍 Languages",
     skills: [
-      { name: "Swedish", icon: null, description: "Native language." },
-      { name: "English", icon: null, description: "Fluent in speaking and writing." },
-      { name: "Several Nordic/European basics", icon: null, description: "Basic knowledge of several languages." },
+      { name: "Swedish", icon: null, description: "Native language.", proficiency: 100 },
+      { name: "English", icon: null, description: "Fluent in speaking and writing.", proficiency: 99 },
+      { name: "Several Nordic/European basics", icon: null, description: "Basic knowledge of several languages.", proficiency: 50 },
     ],
   },
 ];
@@ -152,6 +153,13 @@ export const SkillsSection = () => {
                       <div className="text-3xl mb-2 text-gray-400 dark:text-gray-500">⚙️</div>
                     )}
                     <p className="text-gray-300 dark:text-gray-400 text-sm">{skill.name}</p>
+                    {/* Proficiency Indicator */}
+                    <div className="w-full bg-gray-600 rounded-full h-2 mt-2">
+                      <div
+                        className="bg-teal-500 h-2 rounded-full"
+                        style={{ width: `${skill.proficiency}%` }}
+                      />
+                    </div>
                   </motion.div>
                   {/* Tooltip */}
                   <div

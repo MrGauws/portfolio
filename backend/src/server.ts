@@ -372,6 +372,10 @@ app.put("/users/:id/make-admin", async (req: Request, res: Response): Promise<an
     }
   });
 
+// Enkel test-rutt för /api
+app.get("/api", (req: Request, res: Response) => {
+  res.send("API is running");
+});
 // Enkel test-route
 app.get("/", (req: Request, res: Response) => {
     res.send("Portfolio API is running!");

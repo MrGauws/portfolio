@@ -3,8 +3,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const MONGO_URI = "mongodb://127.0.0.1:27017/portfolio_db";
+const MONGO_URI = process.env.MONGO_URI;
 
+if (!MONGO_URI) {
+    console.error("❌ MONGO_URI is not defined in environment variables.");
+    process.exit(1);
+}
 
 export const connectDB = async () => {
     try {

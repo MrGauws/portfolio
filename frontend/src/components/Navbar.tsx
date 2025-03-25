@@ -1,14 +1,17 @@
+// frontend/src/components/Navbar.tsx
 "use client";
 
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
+import ReactGA from "react-ga4";
 
 export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home"); // State för aktiv sektion
+  const [activeSection, setActiveSection] = useState("home");
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -48,7 +51,7 @@ export const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["home", "about", "projects", "experience", "contact"];
-      const scrollPosition = window.scrollY + 100; // Justera för navbar-höjd
+      const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -78,6 +81,15 @@ export const Navbar = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
+  };
+
+  // Funktion för att spåra klick på "Download CV"-knappen
+  const handleDownloadCV = () => {
+    ReactGA.event({
+      category: "User",
+      action: "Download CV",
+      label: "Navbar Download CV Button",
+    });
   };
 
   return (
@@ -135,8 +147,21 @@ export const Navbar = () => {
           contact
         </Link>
       </nav>
+      
+      {/* Download CV Button */}
+      <motion.a
+          href="/cv.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={handleDownloadCV}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="inline-block px-3 py-1 rounded bg-teal-500 text-black font-semibold hover:bg-teal-600 transition text-sm"
+        >
+          Download CV
+        </motion.a>
 
-      {/* Right side: Login/Logout and Theme Toggle */}
+      {/* Right side: Login/Logout, Theme Toggle, and Download CV */}
       <div className="flex gap-4 items-center">
         {!isLoggedIn ? (
           <Link href="/login" className="hover:underline">
@@ -189,6 +214,8 @@ export const Navbar = () => {
         >
           {theme === "light" ? "🌙" : "☀️"}
         </button>
+
+        
       </div>
     </header>
   );
