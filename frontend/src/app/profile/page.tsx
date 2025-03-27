@@ -14,10 +14,11 @@ export default function ProfilePage() {
       return;
     }
 
-    fetch("http://localhost:5000/users", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: "no-store",
     })
       .then((res) => res.json())
       .then((data) => {
@@ -28,6 +29,10 @@ export default function ProfilePage() {
         } else {
           router.push("/login");
         }
+      })
+      .catch((err) => {
+        console.error("Error fetching user:", err);
+        router.push("/login");
       });
   }, [router]);
 

@@ -3,33 +3,63 @@ version: '3.8'
 services:
   frontend:
     build: ./frontend
+    platform: linux/arm64
     ports:
-      - "80:3000"  # Ändra från 3000:3000 till 80:3000
+      - "3000:3000"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     environment:
-      - NEXT_PUBLIC_API_URL=http://98.128.179.210:5000
+      - NEXT_PUBLIC_API_URL=http://backend:5000
       - NODE_ENV=production
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - portfolio-network
 
   backend:
     build: ./backend
-    ports:
-      - "5000:5000"
+    platform: linux/arm64
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     env_file:
       - ./backend/.env
     environment:
       - MONGO_URI=mongodb://mongo:27017/portfolio
       - PORT=5000
+    restart: always
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "5000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - portfolio-network
 
   mongo:
     image: mongo:6
+    platform: linux/arm64
     restart: always
-    ports:
-      - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+      start_period: 30s
+    networks:
+      - portfolio-network
 
 volumes:
   mongo-data:
+
+networks:
+  portfolio-network:
+    driver: bridge

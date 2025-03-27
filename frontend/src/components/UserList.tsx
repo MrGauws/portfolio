@@ -1,4 +1,5 @@
 "use client";
+
 export type { User };
 
 import { useEffect, useState } from "react";
@@ -17,6 +18,8 @@ export const UserList = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -28,10 +31,11 @@ export const UserList = () => {
     const decoded: any = JSON.parse(atob(token.split(".")[1]));
     setCurrentUserId(decoded.id);
 
-    fetch("http://localhost:5000/users", {
+    fetch(`${API_URL}/users`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: "no-store",
     })
       .then(async (res) => {
         if (!res.ok) throw new Error("Kunde inte hämta användare");
@@ -56,7 +60,7 @@ export const UserList = () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/users/${userId}`, {
+      const res = await fetch(`${API_URL}/users/${userId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

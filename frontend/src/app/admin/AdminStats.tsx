@@ -22,7 +22,7 @@ export const AdminStats = () => {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("Ingen token hittad");
 
-        const res = await fetch("http://localhost:5000/stats", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stats`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -47,14 +47,18 @@ export const AdminStats = () => {
   }
 
   return (
-    <div className="stats-container border rounded p-4 bg-gray-100">
+    <div className="stats-container rounded p-4 bg-black text-white mb-6">
       <h2 className="text-xl font-semibold mb-4">Statistik</h2>
-      <p>
-        <strong>Totalt antal användare:</strong> {stats.totalUsers}
-      </p>
-      <p>
-        <strong>Admin-användare:</strong> {stats.adminUsers}
-      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="p-4 bg-gray-800 rounded">
+          <p className="text-lg font-medium">Totalt antal användare:</p>
+          <p className="text-2xl">{stats.totalUsers}</p>
+        </div>
+        <div className="p-4 bg-gray-800 rounded">
+          <p className="text-lg font-medium">Admin-användare:</p>
+          <p className="text-2xl">{stats.adminUsers}</p>
+        </div>
+      </div>
     </div>
   );
 };

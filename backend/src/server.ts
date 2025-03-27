@@ -104,7 +104,13 @@ app.delete("/projects/:id", async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    // Optionally verify token or user permissions here
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
+    const adminUser = await User.findById(decoded.id);
+
+    if (!adminUser?.isAdmin) {
+      res.status(403).json({ message: "Endast admins kan ta bort projekt." });
+      return;
+    }
 
     const { id } = req.params;
 

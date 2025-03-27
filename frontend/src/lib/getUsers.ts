@@ -1,7 +1,7 @@
 export async function getUsers() {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  const res = await fetch("http://localhost:5000/users", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

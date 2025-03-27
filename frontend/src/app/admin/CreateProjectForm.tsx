@@ -56,7 +56,7 @@ export const CreateProjectForm = ({ onAdd }: { onAdd: (project: any) => void }) 
         return;
       }
 
-      const res = await fetch("http://localhost:5000/projects", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

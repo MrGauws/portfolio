@@ -115,7 +115,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="bg-black dark:bg-gray-900 text-white dark:text-gray-200">
+    <main className="text-white dark:text-gray-200">
       <motion.div
         className="space-y-12"
         variants={containerVariants}
@@ -292,7 +292,7 @@ export default function Home() {
         <AnimatedSection id="contact">
           <h2 className="text-4xl font-bold text-center uppercase mb-8">Contact Me</h2>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-8">
-            Have a project in mind or just want to say hi? Send me a message!
+            Have a project in mind or are you interested in hiring me? Send me a message!
           </p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

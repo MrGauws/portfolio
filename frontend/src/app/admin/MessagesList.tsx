@@ -20,7 +20,7 @@ export const MessagesList = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await fetch("http://localhost:5000/messages");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/messages`);
         if (!res.ok) throw new Error("Kunde inte hämta meddelanden.");
         const data: Message[] = await res.json();
 
@@ -41,7 +41,7 @@ export const MessagesList = () => {
 
   const markAsRead = async (id: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/messages/${id}/read`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/messages/${id}/read`, {
         method: "PATCH",
       });
 

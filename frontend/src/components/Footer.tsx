@@ -1,30 +1,34 @@
-// frontend/src/components/Footer.tsx
 "use client";
 
 import { useState } from "react";
 import { FaGithub, FaLinkedin, FaYoutube, FaInstagram, FaShareAlt } from "react-icons/fa";
 import { SiX } from "react-icons/si";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils"; 
 
-const Footer = () => {
-  const [copyMessage, setCopyMessage] = useState(""); // State för att visa kopieringsmeddelande
+interface FooterProps {
+  className?: string;
+}
+
+const Footer = ({ className }: FooterProps) => {
+  const [copyMessage, setCopyMessage] = useState(""); 
 
   const handleShare = async () => {
     const shareData = {
       title: "Herman Engström | Full-Stack Developer Portfolio",
       text: "Check out my portfolio showcasing my skills and projects as a full-stack developer!",
-      url: window.location.href, // Hämta aktuell URL
+      url: window.location.href, 
     };
 
     try {
       if (navigator.share) {
-        // Använd navigator.share om det stöds (främst mobila enheter)
+        
         await navigator.share(shareData);
       } else {
-        // Fallback: Kopiera URL:en till urklippet
+        
         await navigator.clipboard.writeText(shareData.url);
         setCopyMessage("Link copied to clipboard!");
-        setTimeout(() => setCopyMessage(""), 2000); // Dölj meddelandet efter 2 sekunder
+        setTimeout(() => setCopyMessage(""), 2000); 
       }
     } catch (error) {
       console.error("Error sharing:", error);
@@ -34,9 +38,9 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-black dark:bg-gray-900 text-gray-400 py-6 border-t border-gray-800 relative">
+    <footer className={cn("bg-black dark:bg-gray-900 text-gray-400 py-6 border-t border-gray-800 relative", className)}>
       <div className="max-w-5xl mx-auto px-4 flex flex-col items-center space-y-4">
-        {/* Social Media Links and Share Button (Centered) */}
+        {/* Social Media Links */}
         <div className="flex space-x-4 items-center">
           <a
             href="https://github.com/MrGauws"
@@ -47,7 +51,7 @@ const Footer = () => {
             <FaGithub className="text-2xl" />
           </a>
           <a
-            href="https://linkedin.com/in/herman-engstrom"
+            href="https://www.linkedin.com/in/herman-engstr%C3%B6m-08bb42128/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-teal-500 transition-colors duration-200"
@@ -55,7 +59,7 @@ const Footer = () => {
             <FaLinkedin className="text-2xl" />
           </a>
           <a
-            href="https://x.com/your-username" // Replace with your X profile
+            href="https://x.com/" 
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-teal-500 transition-colors duration-200"
@@ -63,7 +67,7 @@ const Footer = () => {
             <SiX className="text-2xl" />
           </a>
           <a
-            href="https://youtube.com/your-channel" // Replace with your YouTube channel
+            href="https://youtube.com/" 
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-teal-500 transition-colors duration-200"
@@ -71,7 +75,7 @@ const Footer = () => {
             <FaYoutube className="text-2xl" />
           </a>
           <a
-            href="https://instagram.com/your-username" // Replace with your Instagram profile
+            href="https://instagram.com/engstromh/" 
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-teal-500 transition-colors duration-200"
@@ -103,7 +107,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright in bottom-right corner */}
+      {/* Copyright */}
       <div className="absolute bottom-2 right-4 text-gray-500 text-xs">
         <p>Copyright Herman Engström</p>
       </div>
