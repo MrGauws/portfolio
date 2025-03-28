@@ -14,16 +14,19 @@ services:
       - NODE_ENV=production
     restart: always
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "nc", "-z", "localhost", "3000"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 30s
     networks:
       - portfolio-network
 
   backend:
     build: ./backend
     platform: linux/arm64
+    ports:
+      - "5000:5000"
     depends_on:
       mongo:
         condition: service_healthy
@@ -43,13 +46,13 @@ services:
       - portfolio-network
 
   mongo:
-    image: mongo:6
+    image: mongo:4.4.18
     platform: linux/arm64
     restart: always
     volumes:
       - mongo-data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 30s
       timeout: 20s
       retries: 5

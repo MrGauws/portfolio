@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, Request, Response, Router } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
@@ -9,19 +9,20 @@ import { Types } from "mongoose";
 import { Project } from "./models/Project";
 import Message from "./models/Message";
 
-
-
 dotenv.config();
 connectDB();
 
-const app: Application = express(); // ✅ Se till att Express är korrekt typad
+const app: Application = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
+// Skapa en router för API-routes
+const apiRouter = Router();
+
 // Hämta alla användare
-app.get("/users", async (req: Request, res: Response): Promise<void> => {
+apiRouter.get("/users", async (req: Request, res: Response): Promise<void> => {
     try {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -32,14 +33,14 @@ app.get("/users", async (req: Request, res: Response): Promise<void> => {
         const token = authHeader.split(" ")[1];
         jwt.verify(token, process.env.JWT_SECRET || "secret");
 
-        const users = await User.find().select("-password"); // 🔥 Hämta alla användare utan lösenord
+        const users = await User.find().select("-password");
         res.json(users);
     } catch (error) {
         res.status(500).json({ message: "Error fetching users" });
     }
 });
 
-app.post("/messages", async (req: Request, res: Response): Promise<void> => {
+apiRouter.post("/messages", async (req: Request, res: Response): Promise<void> => {
   try {
     const { senderName, senderEmail, message } = req.body;
 
@@ -65,7 +66,7 @@ app.post("/messages", async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-app.patch("/messages/:id/read", async (req: Request, res: Response) => {
+apiRouter.patch("/messages/:id/read", async (req: Request, res: Response) => {
   try {
     const message = await Message.findByIdAndUpdate(
       req.params.id,
@@ -85,7 +86,7 @@ app.patch("/messages/:id/read", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/messages", async (req: Request, res: Response): Promise<void> => {
+apiRouter.get("/messages", async (req: Request, res: Response): Promise<void> => {
   try {
     const messages = await Message.find().sort({ createdAt: -1 });
     res.status(200).json(messages);
@@ -95,7 +96,7 @@ app.get("/messages", async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-app.delete("/projects/:id", async (req: Request, res: Response): Promise<void> => {
+apiRouter.delete("/projects/:id", async (req: Request, res: Response): Promise<void> => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
 
@@ -133,7 +134,7 @@ app.delete("/projects/:id", async (req: Request, res: Response): Promise<void> =
   }
 });
 
-app.get("/projects", async (req: Request, res: Response) => {
+apiRouter.get("/projects", async (req: Request, res: Response) => {
   try {
     const projects = await Project.find();
     res.json(projects);
@@ -143,7 +144,7 @@ app.get("/projects", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/projects", async (req: Request, res: Response): Promise<void> => {
+apiRouter.post("/projects", async (req: Request, res: Response): Promise<void> => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
@@ -170,14 +171,14 @@ app.post("/projects", async (req: Request, res: Response): Promise<void> => {
     const newProject = new Project({ title, description, demoLink, githubLink });
     await newProject.save();
 
-    res.status(201).json(newProject); // 🔥 Returnerar direkt projektet
+    res.status(201).json(newProject);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Serverfel vid tillägg av projekt." });
   }
 });
 
-app.post("/register", async (req: Request, res: Response): Promise<void> => {
+apiRouter.post("/register", async (req: Request, res: Response): Promise<void> => {
     try {
         console.log("🔹 Registreringsförfrågan mottagen:", req.body);
 
@@ -210,7 +211,7 @@ app.post("/register", async (req: Request, res: Response): Promise<void> => {
 });
 
 // Inloggningsroute
-app.post("/login", async (req: Request, res: Response): Promise<void> => {
+apiRouter.post("/login", async (req: Request, res: Response): Promise<void> => {
     try {
         console.log("🔍 Inloggningsförfrågan mottagen:", req.body);
 
@@ -261,7 +262,7 @@ app.post("/login", async (req: Request, res: Response): Promise<void> => {
 });
 
 // Ta bort användare (admin only)
-app.delete("/users/:id", async (req: Request, res: Response): Promise<void> => {
+apiRouter.delete("/users/:id", async (req: Request, res: Response): Promise<void> => {
     const token = req.headers.authorization?.split(" ")[1];
   
     if (!token) {
@@ -289,61 +290,60 @@ app.delete("/users/:id", async (req: Request, res: Response): Promise<void> => {
       console.error(err);
       res.status(401).json({ message: "Ogiltig token" });
     }
-  });
+});
   
-  // Admin: skapa ny användare
-  app.post("/users", async (req: Request, res: Response): Promise<any> => {
-    console.log("🔹 Skapa användare – inkommande body:", req.body);
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "Ingen token." });
+// Admin: skapa ny användare
+apiRouter.post("/users", async (req: Request, res: Response): Promise<any> => {
+  console.log("🔹 Skapa användare – inkommande body:", req.body);
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "Ingen token." });
   
-    try {
-      const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
-      console.log("🔐 Token payload:", decoded);
-      const adminUser = await User.findById(decoded.id);
-      if (!adminUser?.isAdmin) {
-        res.status(403).json({ message: "Endast admins kan skapa användare." });
-        return;
-      }
-  
-      const { name, email, password } = req.body;
-      if (!name || !email || !password) {
-        res.status(400).json({ message: "Alla fält krävs." });
-        return;
-      }
-  
-      const existing = await User.findOne({ email });
-      if (existing) {
-        res.status(409).json({ message: "E-postadressen används redan." });
-        return;
-      }
-  
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-  
-      const newUser = await User.create({
-        name,
-        email,
-        password: hashedPassword,
-      });
-  
-      res.status(201).json({ message: "Användare skapad", user: newUser });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Serverfel vid skapande av användare" });
+  try {
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
+    console.log("🔐 Token payload:", decoded);
+    const adminUser = await User.findById(decoded.id);
+    if (!adminUser?.isAdmin) {
+      res.status(403).json({ message: "Endast admins kan skapa användare." });
+      return;
     }
-  });
   
-
-app.post("/test-hash", async (req: Request, res: Response) => {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      res.status(400).json({ message: "Alla fält krävs." });
+      return;
+    }
+  
+    const existing = await User.findOne({ email });
+    if (existing) {
+      res.status(409).json({ message: "E-postadressen används redan." });
+      return;
+    }
+  
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+  
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
+  
+    res.status(201).json({ message: "Användare skapad", user: newUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Serverfel vid skapande av användare" });
+  }
+});
+  
+apiRouter.post("/test-hash", async (req: Request, res: Response) => {
     const { password } = req.body;
-
+  
     // Simulera hashning och direkt jämförelse
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt);
-
+  
     const isMatch = await bcrypt.compare(password, hashed);
-
+  
     res.json({
         original: password,
         hashed,
@@ -351,7 +351,7 @@ app.post("/test-hash", async (req: Request, res: Response) => {
     });
 });
 
-app.put("/users/:id/make-admin", async (req: Request, res: Response): Promise<any> => {
+apiRouter.put("/users/:id/make-admin", async (req: Request, res: Response): Promise<any> => {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) return res.status(401).json({ message: "Ingen token." });
   
@@ -376,13 +376,12 @@ app.put("/users/:id/make-admin", async (req: Request, res: Response): Promise<an
       console.error(err);
       res.status(500).json({ message: "Serverfel vid uppdatering." });
     }
-  });
-
-// Enkel test-rutt för /api
-app.get("/api", (req: Request, res: Response) => {
-  res.send("API is running");
 });
-// Enkel test-route
+
+// Använd apiRouter för alla API-routes
+app.use('/api', apiRouter);
+
+// Enkel test-rutt för rot-URL
 app.get("/", (req: Request, res: Response) => {
     res.send("Portfolio API is running!");
 });

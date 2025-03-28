@@ -16,6 +16,8 @@ FROM node:18-alpine AS runner
 
 WORKDIR /app
 
+RUN apk add --no-cache netcat-openbsd
+
 # Kopiera endast det som behövs för produktion
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
